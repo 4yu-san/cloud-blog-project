@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="How I built a hybrid grapple mechanic in Unity 3D — Aayush Abhyankar" />
+  <title>Building a Grapple Mechanic in Unity 3D | CloudBlog</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <!-- ========== NAVBAR ========== -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="../index.html" class="nav-logo">Cloud<span>Blog</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="grapple-mechanic-unity.html" class="active">Blog</a></li>
+      </ul>
+      <div class="hamburger" onclick="toggleNav()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========== POST HERO ========== -->
+  <section class="post-hero">
+    <div class="container">
+      <a href="../index.html" class="back-link">← Back to Home</a>
+      <span class="post-tag">Game Dev</span>
+      <h1 class="post-title">Building a Hybrid Grapple Mechanic in Unity 3D</h1>
+      <div class="post-info">
+        <span>✍️ Aayush Abhyankar</span>
+        <span>📅 June 2025</span>
+        <span>🕐 8 min read</span>
+        <span>🎮 Game Development</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== POST BODY ========== -->
+  <section class="post-body">
+    <div class="container">
+      <div class="post-content">
+
+        <p>
+          Grapple mechanics are one of those things that look simple from the outside
+          but hide a surprising amount of complexity once you actually try to implement
+          them. I recently built one for a 3D game in Unity — a hybrid system that lets
+          the player both swing like a pendulum and get pulled directly to a grapple point
+          depending on context. Here's exactly how I built it, what broke along the way,
+          and what I'd do differently.
+        </p>
+
+        <h2>The Goal — What I Wanted It To Feel Like</h2>
+        <p>
+          I didn't want a simple teleport-to-point mechanic. I wanted weight — the feeling
+          that the player is actually attached to something and physics is doing real work.
+          The design was:
+        </p>
+        <ul>
+          <li>Fire a hook toward a tagged grapple point in the scene</li>
+          <li>If the point is above and far — swing from it like a pendulum</li>
+          <li>If the point is close or the player holds a separate input — get pulled directly to it</li>
+          <li>Release the hook and carry the momentum forward</li>
+        </ul>
+        <p>
+          That last part — carrying momentum — is what separates a satisfying grapple
+          from a frustrating one. If you stop dead the moment you let go, it feels broken.
+        </p>
+
+        <h2>Step 1 — Setting Up the Scene Tags</h2>
+        <p>
+          Rather than letting the player grapple onto any surface (which causes all kinds
+          of edge case problems), I tagged specific objects in the scene as grapple points.
+          In Unity this is straightforward — select any object, and in the Inspector at the
+          top set its Tag to a custom tag called <code>GrapplePoint</code>.
+        </p>
+        <pre><code>// Create this tag in Unity:
+// Edit → Project Settings → Tags and Layers → Tags → + → "GrapplePoint"
+
+// Then assign it to any object you want to be grappable
+// in the Inspector's Tag dropdown at the top</code></pre>
+        <p>
+          I placed empty <code>GameObject</code>s at grapple-able locations — ceiling beams,
+          cliff edges, metal rings — rather than tagging the geometry itself. This gave me
+          precise control over exactly where the hook lands.
+        </p>
+
+        <h2>Step 2 — Detecting the Grapple Point</h2>
+        <p>
+          When the player presses the grapple button, I fire a <code>SphereCast</code>
+          from the camera forward. A SphereCast is like a raycast but with a radius —
+          it's more forgiving and feels better for a mechanic the player needs to use
+          quickly in motion.
+        </p>
+        <pre><code>// GrappleGun.cs
+using UnityEngine;
+
+public class GrappleGun : MonoBehaviour
+{
+    [Header("Grapple Settings")]
+    public float maxGrappleDistance = 30f;
+    public float sphereCastRadius   = 1.5f;
+    public LayerMask grappleLayer;
+    public Transform cameraTransform;
+
+    private Vector3 grapplePoint;
+    private bool    isGrappling = false;
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+            TryGrapple();
+
+        if (Input.GetKeyUp(KeyCode.Mouse0))
+            StopGrapple();
+    }
+
+    void TryGrapple()
+    {
+        RaycastHit hit;
+
+        // SphereCast from camera — easier to aim than a precise raycast
+        if (Physics.SphereCast(
+                cameraTransform.position,
+                sphereCastRadius,
+                cameraTransform.forward,
+                out hit,
+                maxGrappleDistance,
+                grappleLayer))
+        {
+            // Only attach if the object has the GrapplePoint tag
+            if (hit.collider.CompareTag("GrapplePoint"))
+            {
+                grapplePoint = hit.point;
+                isGrappling  = true;
+                StartSwing();
+            }
+        }
+    }
+
+    void StopGrapple()
+    {
+        isGrappling = false;
+        // StopSwing() called here — see Step 3
+    }
+}</code></pre>
+
+        <h2>Step 3 — The Swing (SpringJoint + Rigidbody)</h2>
+        <p>
+          For the swing physics I used Unity's <code>SpringJoint</code> component attached
+          to the player's <code>Rigidbody</code>. A SpringJoint connects two Rigidbodies
+          with a spring — but with the spring stiffness set very high and damping low, it
+          behaves like a taught rope, which is exactly what a grapple cable feels like.
+        </p>
+        <pre><code>// Add to GrappleGun.cs
+[Header("Spring Settings")]
+public float springStiffness = 800f;
+public float springDamper    = 10f;
+public float massScale       = 4.5f;
+
+private SpringJoint joint;
+private Rigidbody   playerRb;
+
+void Awake()
+{
+    playerRb = GetComponent&lt;Rigidbody&gt;();
+}
+
+void StartSwing()
+{
+    // Create the SpringJoint dynamically
+    joint = gameObject.AddComponent&lt;SpringJoint&gt;();
+
+    joint.autoConfigureConnectedAnchor = false;
+    joint.connectedAnchor = grapplePoint;
+
+    // Set the rope length to the distance between player and grapple point
+    float distanceFromPoint = Vector3.Distance(
+        transform.position, grapplePoint);
+
+    joint.maxDistance = distanceFromPoint * 0.8f;
+    joint.minDistance = distanceFromPoint * 0.25f;
+
+    // Spring physics values
+    joint.spring    = springStiffness;
+    joint.damper    = springDamper;
+    joint.massScale = massScale;
+}
+
+void StopGrapple()
+{
+    isGrappling = false;
+    Destroy(joint);   // removing the joint releases the player
+}</code></pre>
+
+        <blockquote>
+          The key insight: setting <code>maxDistance</code> to 80% of the real distance
+          means the spring immediately pulls the player slightly — giving that satisfying
+          snap when the hook connects.
+        </blockquote>
+
+        <h2>Step 4 — The Pull (Direct Movement to Point)</h2>
+        <p>
+          When the player holds <code>Left Shift</code> while grappling, instead of
+          swinging they get pulled directly toward the grapple point. This is done by
+          adding force to the Rigidbody in the direction of the grapple point every
+          fixed update frame:
+        </p>
+        <pre><code>// Add to GrappleGun.cs
+[Header("Pull Settings")]
+public float pullForce = 25f;
+
+void FixedUpdate()
+{
+    if (!isGrappling) return;
+
+    if (Input.GetKey(KeyCode.LeftShift))
+    {
+        // Pull mode — apply force directly toward grapple point
+        Vector3 directionToPoint =
+            (grapplePoint - transform.position).normalized;
+
+        playerRb.AddForce(directionToPoint * pullForce, ForceMode.Acceleration);
+
+        // Stop pulling once close enough
+        float distanceFromPoint =
+            Vector3.Distance(transform.position, grapplePoint);
+
+        if (distanceFromPoint &lt; 2f)
+            StopGrapple();
+    }
+}</code></pre>
+
+        <h2>Step 5 — Preserving Momentum on Release</h2>
+        <p>
+          This is the detail that makes it feel good. When the player releases the grapple
+          mid-swing, Unity's Rigidbody already has velocity — so momentum carries forward
+          automatically. The only thing I needed to prevent was the Rigidbody being
+          dampened by drag. I set <code>Rigidbody.drag</code> to <code>0</code> while
+          grappling and restore it on release:
+        </p>
+        <pre><code>void StartSwing()
+{
+    playerRb.drag = 0f;   // no air resistance during grapple
+    // ... rest of StartSwing
+}
+
+void StopGrapple()
+{
+    isGrappling      = false;
+    playerRb.drag    = 1f;   // restore normal drag
+    Destroy(joint);
+}</code></pre>
+
+        <h2>What Broke and What I Learned</h2>
+        <p>
+          The first version had the grapple attaching to geometry directly using a
+          regular Raycast — which meant it would attach to floors, tiny ledges, and
+          invisible colliders. Switching to tagged empty GameObjects as grapple points
+          fixed this immediately and also made level design much more intentional.
+        </p>
+        <p>
+          The other thing that took time was tuning the SpringJoint values. Too high a
+          spring value and the player gets flung violently. Too low and it feels like
+          a bungee cord. The values in this post took about an hour of playtesting to land on.
+        </p>
+        <p>
+          If I were building this again I'd add a visual rope using a
+          <code>LineRenderer</code> — the mechanic works without it but the visual
+          feedback makes it significantly more readable for the player. That's the next
+          thing on the list.
+        </p>
+
+        <div class="post-tags">
+          <span>Tags:</span>
+          <span class="skill-tag">Unity</span>
+          <span class="skill-tag">Game Dev</span>
+          <span class="skill-tag">C#</span>
+          <span class="skill-tag">3D</span>
+          <span class="skill-tag">Physics</span>
+        </div>
+
+        <!-- Post Navigation -->
+        <div style="display:flex; justify-content:flex-start; margin-top:3rem;
+                    padding-top:1.5rem; border-top:1px solid var(--border);">
+          <a href="cloud-computing-intro.html" class="btn btn-outline">← Prev: Cloud Computing</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>Cloud<span>Blog</span></h3>
+          <p>A cloud-hosted blog platform built as a mini-project for the
+             Cloud Computing course. Deployed via GitHub Actions to Azure Static Web Apps.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Posts</h4>
+          <ul>
+            <li><a href="linux-journey.html">Linux Journey</a></li>
+            <li><a href="docker-getting-started.html">Getting Started with Docker</a></li>
+            <li><a href="cloud-computing-intro.html">Intro to Cloud Computing</a></li>
+            <li><a href="grapple-mechanic-unity.html">Grapple Mechanic in Unity</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Site</h4>
+          <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../about.html">About</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Aayush Abhyankar · IT Engineering · Cloud Computing Project</p>
+        <div class="status-badge">
+          <span class="status-dot"></span>
+          Deployed on Azure Static Web Apps
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleNav() {
+      document.getElementById('navLinks').classList.toggle('open');
+    }
+  </script>
+</body>
+</html>
