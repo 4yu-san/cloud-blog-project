@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Getting Started with Docker — Aayush Abhyankar" />
+  <title>Getting Started with Docker | CloudBlog</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <!-- ========== NAVBAR ========== -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="../index.html" class="nav-logo">Cloud<span>Blog</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="docker-getting-started.html" class="active">Blog</a></li>
+      </ul>
+      <div class="hamburger" onclick="toggleNav()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========== POST HERO ========== -->
+  <section class="post-hero">
+    <div class="container">
+      <a href="../index.html" class="back-link">← Back to Home</a>
+      <span class="post-tag">Docker</span>
+      <h1 class="post-title">Getting Started with Docker</h1>
+      <div class="post-info">
+        <span>✍️ Aayush Abhyankar</span>
+        <span>📅 June 2025</span>
+        <span>🕐 6 min read</span>
+        <span>☁️ Cloud Computing Project</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== POST BODY ========== -->
+  <section class="post-body">
+    <div class="container">
+      <div class="post-content">
+
+        <p>
+          "It works on my machine" — every developer has said this at least once.
+          Docker exists to make that sentence obsolete. It packages your application
+          along with everything it needs to run — the code, runtime, libraries, and
+          config — into a single portable unit called a <strong>container</strong>.
+          Wherever that container runs, it behaves identically.
+        </p>
+
+        <h2>Containers vs Virtual Machines</h2>
+        <p>
+          Before Docker, the standard solution was virtual machines (VMs). A VM emulates
+          an entire computer, including its own OS kernel — which makes it heavy and slow
+          to start. Containers are different: they share the host OS kernel and only
+          isolate the application layer, making them lightweight and fast.
+        </p>
+        <ul>
+          <li>A VM might take 30–60 seconds to boot</li>
+          <li>A Docker container starts in under a second</li>
+          <li>A VM image can be several gigabytes</li>
+          <li>A Docker image is typically tens to hundreds of megabytes</li>
+        </ul>
+
+        <h2>Key Docker Concepts</h2>
+        <p>
+          There are three core concepts you need to understand before writing
+          your first Dockerfile:
+        </p>
+        <ul>
+          <li>
+            <strong>Image</strong> — A read-only blueprint for a container.
+            Think of it like a class in object-oriented programming.
+          </li>
+          <li>
+            <strong>Container</strong> — A running instance of an image.
+            Like an object created from a class.
+          </li>
+          <li>
+            <strong>Dockerfile</strong> — A script of instructions that tells
+            Docker how to build an image.
+          </li>
+        </ul>
+
+        <h2>Your First Dockerfile</h2>
+        <p>
+          Here's a minimal Dockerfile for a simple Python web app. Every line
+          is an instruction that creates a new layer in the image:
+        </p>
+        <pre><code># Start from an official base image
+FROM python:3.11-slim
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy dependency file first (layer caching trick)
+COPY requirements.txt .
+
+# Install dependencies
+RUN pip install -r requirements.txt
+
+# Copy the rest of the app code
+COPY . .
+
+# Tell Docker which port the app listens on
+EXPOSE 5000
+
+# Command to run when container starts
+CMD ["python", "app.py"]</code></pre>
+
+        <h2>Essential Docker Commands</h2>
+        <p>
+          Once you have a Dockerfile, these are the commands you'll use constantly:
+        </p>
+        <pre><code># Build an image from the Dockerfile in current directory
+docker build -t my-app:latest .
+
+# Run a container from that image
+docker run -p 5000:5000 my-app:latest
+
+# List running containers
+docker ps
+
+# List all containers (including stopped)
+docker ps -a
+
+# Stop a container
+docker stop &lt;container_id&gt;
+
+# Remove a container
+docker rm &lt;container_id&gt;
+
+# List all images
+docker images
+
+# Pull an image from Docker Hub
+docker pull nginx</code></pre>
+
+        <h2>Docker in the Cloud Context</h2>
+        <p>
+          Docker is the bridge between local development and cloud deployment.
+          Cloud platforms like Azure, AWS, and Google Cloud all have container
+          hosting services — Azure Container Instances, Amazon ECS, and Google
+          Cloud Run respectively. When you containerise your app with Docker,
+          you make it cloud-ready by default.
+        </p>
+
+        <blockquote>
+          Containerisation is not just a DevOps trend — it is the foundation
+          of how modern software is shipped and scaled in the cloud.
+        </blockquote>
+
+        <h2>Why Every Student Should Learn Docker</h2>
+        <p>
+          Docker is one of those tools that feels complex at first but pays
+          dividends immediately. Once you understand it, you can spin up databases,
+          web servers, and entire development environments with a single command.
+          It eliminates "dependency hell" and makes your projects reproducible
+          across any machine — your laptop, your teammate's laptop, or a cloud server.
+        </p>
+        <p>
+          Start simple: containerise a small Python or Node.js script. Run it.
+          Then try Docker Compose to connect two containers together. From there,
+          the path to Kubernetes and cloud-native development opens up naturally.
+        </p>
+
+        <div class="post-tags">
+          <span>Tags:</span>
+          <span class="skill-tag">Docker</span>
+          <span class="skill-tag">Containers</span>
+          <span class="skill-tag">DevOps</span>
+          <span class="skill-tag">Cloud</span>
+        </div>
+
+        <!-- Post Navigation -->
+        <div style="display:flex; justify-content:space-between; margin-top:3rem;
+                    padding-top:1.5rem; border-top:1px solid var(--border); flex-wrap:wrap; gap:1rem;">
+          <a href="linux-journey.html" class="btn btn-outline">← Prev: Linux</a>
+          <a href="cloud-computing-intro.html" class="btn btn-outline">Next: Cloud Computing →</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>Cloud<span>Blog</span></h3>
+          <p>A cloud-hosted blog platform built as a mini-project for the
+             Cloud Computing course. Deployed via GitHub Actions to Azure Static Web Apps.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Posts</h4>
+          <ul>
+            <li><a href="linux-journey.html">Linux Journey</a></li>
+            <li><a href="docker-getting-started.html">Getting Started with Docker</a></li>
+            <li><a href="cloud-computing-intro.html">Intro to Cloud Computing</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Site</h4>
+          <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../about.html">About</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Aayush Abhyankar · IT Engineering · Cloud Computing Project</p>
+        <div class="status-badge">
+          <span class="status-dot"></span>
+          Deployed on Azure Static Web Apps
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleNav() {
+      document.getElementById('navLinks').classList.toggle('open');
+    }
+  </script>
+</body>
+</html>

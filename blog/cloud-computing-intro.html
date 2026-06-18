@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Introduction to Cloud Computing — Aayush Abhyankar" />
+  <title>Introduction to Cloud Computing | CloudBlog</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+
+  <!-- ========== NAVBAR ========== -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="../index.html" class="nav-logo">Cloud<span>Blog</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="cloud-computing-intro.html" class="active">Blog</a></li>
+      </ul>
+      <div class="hamburger" onclick="toggleNav()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========== POST HERO ========== -->
+  <section class="post-hero">
+    <div class="container">
+      <a href="../index.html" class="back-link">← Back to Home</a>
+      <span class="post-tag">Cloud</span>
+      <h1 class="post-title">Introduction to Cloud Computing</h1>
+      <div class="post-info">
+        <span>✍️ Aayush Abhyankar</span>
+        <span>📅 June 2025</span>
+        <span>🕐 7 min read</span>
+        <span>☁️ Cloud Computing Project</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== POST BODY ========== -->
+  <section class="post-body">
+    <div class="container">
+      <div class="post-content">
+
+        <p>
+          Not long ago, running a website meant buying a physical server, setting it up
+          in a room, paying for electricity, and hoping it didn't crash at 2 AM. Today,
+          you can have a globally distributed application running in minutes, paying only
+          for what you use, with built-in redundancy across multiple data centres.
+          That transformation has a name: <strong>cloud computing</strong>.
+        </p>
+
+        <h2>What Is Cloud Computing?</h2>
+        <p>
+          Cloud computing is the delivery of computing services — servers, storage,
+          databases, networking, software, and intelligence — over the internet.
+          Instead of owning and maintaining physical hardware, you rent access to
+          these resources from a cloud provider and pay for only what you consume.
+        </p>
+        <p>
+          The three major cloud providers that dominate the industry are:
+        </p>
+        <ul>
+          <li><strong>Microsoft Azure</strong> — Deep enterprise integration, strong hybrid cloud</li>
+          <li><strong>Amazon Web Services (AWS)</strong> — Largest market share, widest service catalogue</li>
+          <li><strong>Google Cloud Platform (GCP)</strong> — Strong in AI/ML and data analytics</li>
+        </ul>
+
+        <h2>The Three Service Models</h2>
+        <p>
+          Cloud services are typically grouped into three models, often visualised
+          as a stack — each layer abstracts more infrastructure away from the user:
+        </p>
+
+        <h3>IaaS — Infrastructure as a Service</h3>
+        <p>
+          You get raw computing resources: virtual machines, storage, and networking.
+          You manage the OS, middleware, and applications. Examples include
+          <code>Azure Virtual Machines</code> and <code>AWS EC2</code>.
+          This gives maximum control but requires the most management.
+        </p>
+
+        <h3>PaaS — Platform as a Service</h3>
+        <p>
+          The provider manages the underlying infrastructure and OS. You focus on
+          deploying and managing your application code. Examples include
+          <code>Azure App Service</code> and <code>Google App Engine</code>.
+          Ideal for developers who want to ship fast without worrying about servers.
+        </p>
+
+        <h3>SaaS — Software as a Service</h3>
+        <p>
+          Fully managed software delivered over the internet. You just use it.
+          Examples include Gmail, Microsoft 365, and Dropbox. No infrastructure
+          or platform management at all.
+        </p>
+
+        <h2>Deployment Models</h2>
+        <p>
+          Beyond service models, clouds also differ in who can access them:
+        </p>
+        <ul>
+          <li>
+            <strong>Public Cloud</strong> — Resources shared across many customers
+            (e.g. Azure, AWS). Cost-effective and scalable.
+          </li>
+          <li>
+            <strong>Private Cloud</strong> — Dedicated infrastructure for a single
+            organisation. More control and security, higher cost.
+          </li>
+          <li>
+            <strong>Hybrid Cloud</strong> — A combination of both. Sensitive data
+            stays on-premises; scalable workloads move to the public cloud.
+          </li>
+        </ul>
+
+        <h2>Core Benefits of Cloud Computing</h2>
+        <pre><code>✔ On-demand self-service    — provision resources instantly, no human interaction
+✔ Broad network access      — accessible from anywhere via internet
+✔ Resource pooling          — shared infrastructure serves multiple customers
+✔ Rapid elasticity          — scale up or down automatically with demand
+✔ Measured service          — pay only for what you use (like electricity)</code></pre>
+
+        <h2>This Project: A Real Cloud Example</h2>
+        <p>
+          This very blog demonstrates cloud computing in action. It is hosted on
+          <strong>Azure Static Web Apps</strong> — a PaaS offering from Microsoft Azure.
+          The source code lives on GitHub, and every time a change is pushed to the
+          main branch, a <strong>GitHub Actions</strong> CI/CD pipeline automatically
+          builds and deploys the site to Azure's global CDN.
+        </p>
+        <p>
+          The result is a website that:
+        </p>
+        <ul>
+          <li>Costs nothing to host (Azure free tier)</li>
+          <li>Loads from an edge server closest to the visitor</li>
+          <li>Deploys automatically on every code push</li>
+          <li>Scales infinitely without any configuration</li>
+        </ul>
+
+        <blockquote>
+          Cloud computing is not about replacing your IT infrastructure —
+          it is about rethinking how software is built, delivered, and maintained
+          in a world where the internet is the platform.
+        </blockquote>
+
+        <h2>Where to Go From Here</h2>
+        <p>
+          If you're a student exploring cloud computing for the first time, the best
+          next step is hands-on practice. Sign up for the Azure free tier, deploy a
+          static website, spin up a virtual machine, or explore Azure Functions for
+          serverless computing. The concepts only click when you're actually building.
+        </p>
+        <p>
+          Cloud certifications like the <strong>AZ-900 Azure Fundamentals</strong>
+          exam are also a great way to validate your knowledge and add credibility
+          to your resume — and Microsoft offers free learning paths to prepare for it.
+        </p>
+
+        <div class="post-tags">
+          <span>Tags:</span>
+          <span class="skill-tag">Cloud Computing</span>
+          <span class="skill-tag">Azure</span>
+          <span class="skill-tag">IaaS</span>
+          <span class="skill-tag">PaaS</span>
+          <span class="skill-tag">SaaS</span>
+        </div>
+
+        <!-- Post Navigation -->
+        <div style="display:flex; justify-content:flex-start; margin-top:3rem;
+                    padding-top:1.5rem; border-top:1px solid var(--border);">
+          <a href="docker-getting-started.html" class="btn btn-outline">← Prev: Docker</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>Cloud<span>Blog</span></h3>
+          <p>A cloud-hosted blog platform built as a mini-project for the
+             Cloud Computing course. Deployed via GitHub Actions to Azure Static Web Apps.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Posts</h4>
+          <ul>
+            <li><a href="linux-journey.html">Linux Journey</a></li>
+            <li><a href="docker-getting-started.html">Getting Started with Docker</a></li>
+            <li><a href="cloud-computing-intro.html">Intro to Cloud Computing</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Site</h4>
+          <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../about.html">About</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Aayush Abhyankar · IT Engineering · Cloud Computing Project</p>
+        <div class="status-badge">
+          <span class="status-dot"></span>
+          Deployed on Azure Static Web Apps
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleNav() {
+      document.getElementById('navLinks').classList.toggle('open');
+    }
+  </script>
+</body>
+</html>

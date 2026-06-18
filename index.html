@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Aayush Abhyankar's tech blog covering Linux, Docker, and Cloud Computing." />
+  <title>CloudBlog | Aayush Abhyankar</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ========== NAVBAR ========== -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="nav-logo">Cloud<span>Blog</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="blog/linux-journey.html">Blog</a></li>
+      </ul>
+      <div class="hamburger" id="hamburger" onclick="toggleNav()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">☁️ Cloud Computing Mini Project</div>
+      <h1>
+        Exploring Tech,<br />
+        <span class="highlight">One Post at a Time</span>
+      </h1>
+      <p>
+        A blog about Linux, Docker, and Cloud Computing — written by a
+        third-year IT engineering student passionate about open-source
+        and modern DevOps practices.
+      </p>
+      <div class="hero-buttons">
+        <a href="blog/linux-journey.html" class="btn btn-primary">Read Latest Posts</a>
+        <a href="about.html" class="btn btn-outline">About Me</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== STATS STRIP ========== -->
+  <section class="stats-strip">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <h3>3</h3>
+          <p>Blog Posts</p>
+        </div>
+        <div class="stat-item">
+          <h3>3+</h3>
+          <p>Technologies Covered</p>
+        </div>
+        <div class="stat-item">
+          <h3>CI/CD</h3>
+          <p>Auto Deployment</p>
+        </div>
+        <div class="stat-item">
+          <h3>Azure</h3>
+          <p>Cloud Hosted</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FEATURED POSTS ========== -->
+  <section class="featured-posts">
+    <div class="container">
+
+      <div class="section-header">
+        <h2>Featured <span class="text-accent">Posts</span></h2>
+        <p>Deep dives into Linux, containers, and the cloud</p>
+        <div class="section-divider"></div>
+      </div>
+
+      <div class="posts-grid">
+
+        <!-- Card 1 -->
+        <article class="post-card">
+          <span class="post-tag">Linux</span>
+          <h3>My Journey Learning Linux</h3>
+          <p>
+            From a complete beginner to navigating the terminal with confidence —
+            how Linux changed the way I think about computers and opened the door
+            to the world of open-source.
+          </p>
+          <div class="post-meta">
+            <span class="read-time">🕐 5 min read</span>
+            <a href="blog/linux-journey.html" class="read-more">Read more →</a>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="post-card">
+          <span class="post-tag">Docker</span>
+          <h3>Getting Started with Docker</h3>
+          <p>
+            Containers demystified — a practical intro to Docker, images, and
+            volumes. Learn how to containerize an application from scratch and
+            why every developer should know this tool.
+          </p>
+          <div class="post-meta">
+            <span class="read-time">🕐 6 min read</span>
+            <a href="blog/docker-getting-started.html" class="read-more">Read more →</a>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="post-card">
+          <span class="post-tag">Cloud</span>
+          <h3>Introduction to Cloud Computing</h3>
+          <p>
+            What exactly is the cloud and why does it matter? Explore the core
+            concepts of cloud computing — IaaS, PaaS, SaaS — and how platforms
+            like Azure are reshaping the software industry.
+          </p>
+          <div class="post-meta">
+            <span class="read-time">🕐 7 min read</span>
+            <a href="blog/cloud-computing-intro.html" class="read-more">Read more →</a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== TECH STACK STRIP ========== -->
+  <section class="stats-strip">
+    <div class="container">
+      <div class="section-header" style="margin-bottom:1.8rem;">
+        <h2 style="font-size:1.3rem;">Built With</h2>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <h3 style="font-size:1.4rem;">HTML5</h3>
+          <p>Semantic Markup</p>
+        </div>
+        <div class="stat-item">
+          <h3 style="font-size:1.4rem;">CSS3</h3>
+          <p>Dark Theme UI</p>
+        </div>
+        <div class="stat-item">
+          <h3 style="font-size:1.4rem;">GitHub</h3>
+          <p>Version Control</p>
+        </div>
+        <div class="stat-item">
+          <h3 style="font-size:1.4rem;">Azure</h3>
+          <p>Static Web Apps</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+
+        <div class="footer-brand">
+          <h3>Cloud<span>Blog</span></h3>
+          <p>
+            A cloud-hosted blog platform built as a mini-project for the
+            Cloud Computing course. Deployed automatically via GitHub Actions
+            to Azure Static Web Apps.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Pages</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="blog/linux-journey.html">Linux Post</a></li>
+            <li><a href="blog/docker-getting-started.html">Docker Post</a></li>
+            <li><a href="blog/cloud-computing-intro.html">Cloud Post</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Topics</h4>
+          <ul>
+            <li><a href="blog/linux-journey.html">Linux</a></li>
+            <li><a href="blog/docker-getting-started.html">Docker</a></li>
+            <li><a href="blog/cloud-computing-intro.html">Cloud Computing</a></li>
+            <li><a href="about.html">Game Dev</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2025 Aayush Abhyankar · IT Engineering · Cloud Computing Project</p>
+        <div class="status-badge">
+          <span class="status-dot"></span>
+          Deployed on Azure Static Web Apps
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========== JS: Mobile Nav ========== -->
+  <script>
+    function toggleNav() {
+      document.getElementById('navLinks').classList.toggle('open');
+    }
+    // Close nav on link click (mobile)
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('navLinks').classList.remove('open');
+      });
+    });
+  </script>
+
+</body>
+</html>
