@@ -3,6 +3,8 @@
 > A mini-project for the Cloud Computing course — Third Year IT Engineering  
 > **Author:** Aayush Abhyankar | **Deployed on:** Azure Static Web Apps
 
+🌐 **Live Site:** [https://kind-desert-0fa242a00.7.azurestaticapps.net](https://kind-desert-0fa242a00.7.azurestaticapps.net)
+
 ![Deploy to Azure](https://github.com/4yu-san/cloud-blog/actions/workflows/deploy.yml/badge.svg)
 ![Azure Static Web Apps](https://img.shields.io/badge/Azure-Static%20Web%20Apps-0078D4?logo=microsoftazure)
 ![License](https://img.shields.io/badge/license-MIT-green)
