@@ -1,0 +1,30 @@
+[
+  {
+    "tag": "Linux",
+    "title": "My Journey Learning Linux",
+    "excerpt": "From a complete beginner to navigating the terminal with confidence — how Linux changed the way I think about computers and opened the door to the world of open-source.",
+    "readTime": "5 min read",
+    "file": "blog/linux-journey.html"
+  },
+  {
+    "tag": "Docker",
+    "title": "Getting Started with Docker",
+    "excerpt": "Containers demystified — a practical intro to Docker, images, and volumes. Learn how to containerize an application from scratch and why every developer should know this tool.",
+    "readTime": "6 min read",
+    "file": "blog/docker-getting-started.html"
+  },
+  {
+    "tag": "Cloud",
+    "title": "Introduction to Cloud Computing",
+    "excerpt": "What exactly is the cloud and why does it matter? Explore the core concepts of cloud computing — IaaS, PaaS, SaaS — and how platforms like Azure are reshaping the software industry.",
+    "readTime": "7 min read",
+    "file": "blog/cloud-computing-intro.html"
+  },
+  {
+    "tag": "Game Dev",
+    "title": "Building a Hybrid Grapple Mechanic in Unity 3D",
+    "excerpt": "How I implemented a grapple system that lets the player swing like a pendulum or pull to a point — using Unity's Rigidbody, SpringJoint, and tagged grapple objects in the scene.",
+    "readTime": "8 min read",
+    "file": "blog/grapple-mechanic-unity.html"
+  }
+]

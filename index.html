@@ -49,7 +49,8 @@
     <div class="container">
       <div class="stats-grid">
         <div class="stat-item">
-          <h3>4</h3>
+          <!-- Auto-updated by JS from posts.json -->
+          <h3 id="post-count">—</h3>
           <p>Blog Posts</p>
         </div>
         <div class="stat-item">
@@ -78,69 +79,13 @@
         <div class="section-divider"></div>
       </div>
 
-      <div class="posts-grid">
-
-        <!-- Card 1 -->
-        <article class="post-card">
-          <span class="post-tag">Linux</span>
-          <h3>My Journey Learning Linux</h3>
-          <p>
-            From a complete beginner to navigating the terminal with confidence —
-            how Linux changed the way I think about computers and opened the door
-            to the world of open-source.
-          </p>
-          <div class="post-meta">
-            <span class="read-time">🕐 5 min read</span>
-            <a href="blog/linux-journey.html" class="read-more">Read more →</a>
-          </div>
-        </article>
-
-        <!-- Card 2 -->
-        <article class="post-card">
-          <span class="post-tag">Docker</span>
-          <h3>Getting Started with Docker</h3>
-          <p>
-            Containers demystified — a practical intro to Docker, images, and
-            volumes. Learn how to containerize an application from scratch and
-            why every developer should know this tool.
-          </p>
-          <div class="post-meta">
-            <span class="read-time">🕐 6 min read</span>
-            <a href="blog/docker-getting-started.html" class="read-more">Read more →</a>
-          </div>
-        </article>
-
-        <!-- Card 3 -->
-        <article class="post-card">
-          <span class="post-tag">Cloud</span>
-          <h3>Introduction to Cloud Computing</h3>
-          <p>
-            What exactly is the cloud and why does it matter? Explore the core
-            concepts of cloud computing — IaaS, PaaS, SaaS — and how platforms
-            like Azure are reshaping the software industry.
-          </p>
-          <div class="post-meta">
-            <span class="read-time">🕐 7 min read</span>
-            <a href="blog/cloud-computing-intro.html" class="read-more">Read more →</a>
-          </div>
-        </article>
-
-        <!-- Card 4 -->
-        <article class="post-card">
-          <span class="post-tag">Game Dev</span>
-          <h3>Building a Hybrid Grapple Mechanic in Unity 3D</h3>
-          <p>
-            How I implemented a grapple system that lets the player swing like
-            a pendulum or pull to a point — using Unity's Rigidbody, SpringJoint,
-            and tagged grapple objects in the scene.
-          </p>
-          <div class="post-meta">
-            <span class="read-time">🕐 8 min read</span>
-            <a href="blog/grapple-mechanic-unity.html" class="read-more">Read more →</a>
-          </div>
-        </article>
-
+      <!-- Cards injected here automatically from posts.json -->
+      <div class="posts-grid" id="posts-grid">
+        <!-- Loading state -->
+        <p style="color:var(--text-muted); grid-column:1/-1; text-align:center;
+                   padding:3rem 0;">Loading posts...</p>
       </div>
+
     </div>
   </section>
 
@@ -190,21 +135,13 @@
           <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About</a></li>
-            <li><a href="blog/linux-journey.html">Linux Post</a></li>
-            <li><a href="blog/docker-getting-started.html">Docker Post</a></li>
-            <li><a href="blog/cloud-computing-intro.html">Cloud Post</a></li>
-            <li><a href="blog/grapple-mechanic-unity.html">Grapple Mechanic</a></li>
           </ul>
         </div>
 
         <div class="footer-col">
-          <h4>Topics</h4>
-          <ul>
-            <li><a href="blog/linux-journey.html">Linux</a></li>
-            <li><a href="blog/docker-getting-started.html">Docker</a></li>
-            <li><a href="blog/cloud-computing-intro.html">Cloud Computing</a></li>
-            <li><a href="about.html">Game Dev</a></li>
-          </ul>
+          <h4>Posts</h4>
+          <!-- Auto-populated from posts.json -->
+          <ul id="footer-posts"></ul>
         </div>
 
       </div>
@@ -219,17 +156,50 @@
     </div>
   </footer>
 
-  <!-- ========== JS: Mobile Nav ========== -->
+  <!-- ========== JS ========== -->
   <script>
+    // ── Mobile nav ──────────────────────────────────────────
     function toggleNav() {
       document.getElementById('navLinks').classList.toggle('open');
     }
-    // Close nav on link click (mobile)
     document.querySelectorAll('.nav-links a').forEach(link => {
       link.addEventListener('click', () => {
         document.getElementById('navLinks').classList.remove('open');
       });
     });
+
+    // ── Load posts from posts.json ───────────────────────────
+    // To add a new post: just add one entry to posts.json.
+    // This page updates automatically — no HTML changes needed.
+    async function loadPosts() {
+      const res   = await fetch('posts.json');
+      const posts = await res.json();
+
+      // Update post count in stats strip
+      document.getElementById('post-count').textContent = posts.length;
+
+      // Render post cards
+      const grid = document.getElementById('posts-grid');
+      grid.innerHTML = posts.map(post => `
+        <article class="post-card">
+          <span class="post-tag">${post.tag}</span>
+          <h3>${post.title}</h3>
+          <p>${post.excerpt}</p>
+          <div class="post-meta">
+            <span class="read-time">🕐 ${post.readTime}</span>
+            <a href="${post.file}" class="read-more">Read more →</a>
+          </div>
+        </article>
+      `).join('');
+
+      // Render footer post links
+      const footerList = document.getElementById('footer-posts');
+      footerList.innerHTML = posts.map(post => `
+        <li><a href="${post.file}">${post.title}</a></li>
+      `).join('');
+    }
+
+    loadPosts();
   </script>
 
 </body>
